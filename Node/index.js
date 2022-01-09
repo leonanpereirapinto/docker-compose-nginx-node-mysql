@@ -25,7 +25,7 @@ app.get('/', async (req, res) => {
   console.log(rows);
   const names = rows.map((row) => `${row.id} - ${row.name}`);
 
-  res.send(`<h1>Peoples:<br> ${names.join(",<br> ")}</h1>`);
+  res.send(`<h1>Full Cycle Rocks!</h1><br> ${names.join(",<br> ")}`);
 });
 
 app.listen(port, () => {
