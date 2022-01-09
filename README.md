@@ -1,6 +1,6 @@
 # Desafio Full Cycle:
 
-Este projeto faz parte de um dos desafios do curso full cycle 2.0. No qual, consiste em utilizar o nginx como proxy reverso para uma aplicação node.js e MySQL com docker e docker-compose.
+Este projeto faz parte de um dos desafios do curso full cycle 2.0. No qual, consiste em utilizar o nginx como proxy reverso para uma aplicação node.js e MySQL com docker e docker-compose. Além disso, alguns commits possuem assinatura GPG.
 
 Comando a executar:
 `docker-compose up -d`
