@@ -1,0 +1,53 @@
+version: "3"
+services:
+  nginx:
+    platform: linux/amd64 # necessário pois estou no mac com M1
+    build:
+      context: ./Nginx
+    image: leonanpereirapinto/nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+    networks:
+      - node-network
+    depends_on:
+      - node_app
+    entrypoint: dockerize -wait tcp://node_app:3000 -timeout 60s /docker-entrypoint.sh
+    command: "nginx -g \"daemon off;\""
+  node_app:
+    platform: linux/amd64
+    build:
+        context: ./Node
+    container_name: node_app
+    image: leonanpereirapinto/node:latest
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 60s docker-entrypoint.sh
+    command: "node index.js"
+    networks:
+      - node-network
+    tty: true
+    depends_on:
+      - db
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DB=nodedb
+  db:
+    platform: linux/amd64
+    image: mariadb:latest
+    command: "--innodb_use_native_aio=0"
+    container_name: db
+    # restart: always
+    tty: true
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks: 
+      - node-network
+    volumes:
+      - ./MySQL:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+networks:
+  node-network:
+    driver: bridge
